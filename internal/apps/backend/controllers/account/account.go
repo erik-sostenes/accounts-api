@@ -8,7 +8,7 @@ type AccountController interface {
 	Create(http.ResponseWriter, *http.Request)
 }
 
-// accountController implements the AccountController interface 
+// accountController implements the AccountController interface
 type accountController struct{}
 
 // NewAccountController injects all dependencies to create the AccountController instance
