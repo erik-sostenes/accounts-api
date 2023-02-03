@@ -16,15 +16,15 @@ func TestAccountController_Create(t *testing.T) {
 		"Given a valid non-existing account, a status code 201 is expected": {
 			httptest.NewRequest(http.MethodPut, "/v1/account/create?id=94343721-6baa-4cd5-a0b4-6c5d0419c02d",
 				strings.NewReader(`
-											{
-                        "name": "Jared Nicolas V", 
-                        "last_name": "Mitchell",
-												"email": "jared.gibson@gmail.com",
-												"password": "7or2m27yw6zrkao",
-                        "details": {
-                            "permissions": [1, 2, 3]
-                        } 
-											}`,
+						{
+                        				"name": "Jared Nicolas V", 
+                        				"last_name": "Mitchell",
+							"email": "jared.gibson@gmail.com",
+							"password": "7or2m27yw6zrkao",
+                        				"details": {
+                            					"permissions": [1, 2, 3]
+                        				} 
+						}`,
 				)),
 			NewAccountController(),
 			http.StatusCreated,
