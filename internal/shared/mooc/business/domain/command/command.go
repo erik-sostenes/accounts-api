@@ -1,6 +1,11 @@
 package command
 
-import "context"
+import (
+	"context"
+	"fmt"
+
+	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/wrongs"
+)
 
 type (
 	// Command represents the intention to execute an operation on our system that modifies its state
@@ -30,3 +35,32 @@ type (
 		Handler(ctx context.Context, v V) error
 	}
 )
+
+// CommandBus is a map that implements the Bus interface and registers the Command with its Handler
+type CommandBus[V Command] map[string]Handler[V]
+
+// Record receives the Command and Handler and registers them
+func (cb *CommandBus[V]) Record(c Command, h Handler[V]) error {
+	cmdID := c.CommandId()
+
+	_, ok := (*cb)[cmdID]
+	if ok {
+		return wrongs.CommandAlreadyRegisteredError(fmt.Sprintf("Command Already Registered %v", h))
+	}
+
+	(*cb)[cmdID] = h
+
+	return nil
+}
+
+// Dispatch receives the Command and calls the registered Handler
+func (cb *CommandBus[V]) Dispatch(ctx context.Context, v V) error {
+	cmdID := v.CommandId()
+
+	ch, ok := (*cb)[cmdID]
+	if !ok {
+		return wrongs.CommandNotRegisteredError(fmt.Sprintf("Command Not Registered %v", v))
+	}
+
+	return ch.Handler(ctx, v)
+}

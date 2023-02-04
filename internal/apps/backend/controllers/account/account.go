@@ -1,6 +1,11 @@
 package account
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services"
+	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/command"
+)
 
 // AccountController contains the contracts for managing user accounts via http requests
 type AccountController interface {
@@ -9,9 +14,13 @@ type AccountController interface {
 }
 
 // accountController implements the AccountController interface
-type accountController struct{}
+type accountController struct {
+	command.Bus[services.CreateAccountCommand]
+}
 
 // NewAccountController injects all dependencies to create the AccountController instance
-func NewAccountController() AccountController {
-	return &accountController{}
+func NewAccountController(bus command.Bus[services.CreateAccountCommand]) AccountController {
+	return &accountController{
+		Bus: bus,
+	}
 }

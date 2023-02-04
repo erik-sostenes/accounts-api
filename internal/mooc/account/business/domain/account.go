@@ -9,15 +9,14 @@ type Account struct {
 	accountEmail    AccountEmail
 	accountPassword AccountPassword
 	accountCareer   AccountCareer
-	accountToken    AccountToken
 	accountIP       AccountIP
 	accountActive   AccountActive
 	accountDetails  AccountDetails
 }
 
 // NewAccount takes primitive values and converts them into value objects that make up an Account
-func NewAccount(id, username, name, lastName, email, password, career, token, ip, active string,
-	details map[string]any,
+func NewAccount(id, username, name, lastName, email, password, career, ip, active string,
+	details Map,
 ) (Account, error) {
 
 	accounId, err := NewAccountId(id)
@@ -55,11 +54,6 @@ func NewAccount(id, username, name, lastName, email, password, career, token, ip
 		return Account{}, err
 	}
 
-	accountToken, err := NewAccountToken(token)
-	if err != nil {
-		return Account{}, err
-	}
-
 	accountIP, err := NewAccountIP(ip)
 	if err != nil {
 		return Account{}, err
@@ -83,7 +77,6 @@ func NewAccount(id, username, name, lastName, email, password, career, token, ip
 		accountEmail,
 		accountPassword,
 		accountCareer,
-		accountToken,
 		accountIP,
 		accountActive,
 		accountDetails,
@@ -116,10 +109,6 @@ func (a *Account) AccountPassword() AccountPassword {
 
 func (a *Account) AccountCareer() AccountCareer {
 	return a.accountCareer
-}
-
-func (a *Account) AccountToken() AccountToken {
-	return a.accountToken
 }
 
 func (a *Account) AccountIP() AccountIP {
