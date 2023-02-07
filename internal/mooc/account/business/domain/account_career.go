@@ -18,6 +18,6 @@ func NewAccountCareer(value string) (AccountCareer, error) {
 	}, nil
 }
 
-func (a *AccountCareer) String() string {
+func (a AccountCareer) String() string {
 	return a.value
 }

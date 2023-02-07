@@ -18,6 +18,6 @@ func NewAccountUserName(value string) (AccountUserName, error) {
 	}, nil
 }
 
-func (a *AccountUserName) String() string {
+func (a AccountUserName) String() string {
 	return a.value
 }

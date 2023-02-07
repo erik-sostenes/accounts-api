@@ -31,6 +31,6 @@ func NewAccountIP(value string) (AccountIP, error) {
 	}, nil
 }
 
-func (a *AccountIP) String() string {
+func (a AccountIP) String() string {
 	return a.value
 }

@@ -18,6 +18,6 @@ func NewAccounActive(value string) (AccountActive, error) {
 	}, nil
 }
 
-func (a *AccountActive) Bool() bool {
+func (a AccountActive) Bool() bool {
 	return a.value
 }

@@ -18,6 +18,6 @@ func NewAccountId(value string) (AccountId, error) {
 	}, nil
 }
 
-func (id *AccountId) String() string {
+func (id AccountId) String() string {
 	return id.value
 }

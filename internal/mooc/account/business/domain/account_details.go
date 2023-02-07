@@ -11,6 +11,6 @@ func NewAccountDetails(value Map) (AccountDetails, error) {
 	}, nil
 }
 
-func (a *AccountDetails) Value() Map {
+func (a AccountDetails) Value() Map {
 	return a.value
 }

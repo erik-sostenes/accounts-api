@@ -18,6 +18,6 @@ func NewAccountLastName(value string) (AccountLastName, error) {
 	}, nil
 }
 
-func (a *AccountLastName) String() string {
+func (a AccountLastName) String() string {
 	return a.value
 }

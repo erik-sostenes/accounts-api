@@ -31,6 +31,6 @@ func NewAccountEmail(value string) (AccountEmail, error) {
 	}, nil
 }
 
-func (a *AccountEmail) String() string {
+func (a AccountEmail) String() string {
 	return a.value
 }

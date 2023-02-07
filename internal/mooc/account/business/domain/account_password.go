@@ -27,6 +27,6 @@ func NewAccountPassword(value string) (AccountPassword, error) {
 	}, nil
 }
 
-func (a *AccountPassword) String() string {
+func (a AccountPassword) String() string {
 	return a.value
 }
