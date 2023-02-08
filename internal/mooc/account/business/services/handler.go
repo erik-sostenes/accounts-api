@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/domain"
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/ports"
 	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/command"
 )
 
@@ -28,11 +29,17 @@ func (CreateAccountCommand) CommandId() string {
 	return "create_account_command"
 }
 
+// CreateAccountCommandHandler implements the command.Handler interface
+var _ command.Handler[CreateAccountCommand] = &CreateAccountCommandHandler{}
+
 type CreateAccountCommandHandler struct {
+	ports.AccountManager
 }
 
 func (h CreateAccountCommandHandler) Handler(ctx context.Context, cmd CreateAccountCommand) (err error) {
-	_, err = domain.NewAccount(
+	var account domain.Account
+
+	if account, err = domain.NewAccount(
 		cmd.AccountId,
 		cmd.AccountUserName,
 		cmd.AccountName,
@@ -43,11 +50,9 @@ func (h CreateAccountCommandHandler) Handler(ctx context.Context, cmd CreateAcco
 		cmd.AccountIP,
 		cmd.AccountActive,
 		cmd.AccountDetails,
-	)
-
-	if err != nil {
-		return 
+	); err != nil {
+		return
 	}
 
-	return nil
+	return h.AccountManager.Create(ctx, account)
 }

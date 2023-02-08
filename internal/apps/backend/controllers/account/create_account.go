@@ -26,19 +26,19 @@ type Request struct {
 // Create method that receives the request body, wraps the DTO and sends it to the service layer
 func (c *accountController) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "PUT" {
-		rw.JSON(w, 405, domain.Map{"error": "Method Not Allowed"})
+		rw.JSON(w, http.StatusMethodNotAllowed, domain.Map{"error": "Method Not Allowed"})
 		return
 	}
 
 	id := r.URL.Query().Get("id")
 	if strings.TrimSpace(id) == "" {
-		rw.JSON(w, 400, domain.Map{"error": "Invalid ID Format"})
+		rw.JSON(w, http.StatusBadRequest, domain.Map{"error": "Invalid ID Format"})
 		return
 	}
 
 	var request Request
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		rw.JSON(w, 422, domain.Map{"error": err})
+		rw.JSON(w, http.StatusUnprocessableEntity, domain.Map{"error": err})
 		return
 	}
 

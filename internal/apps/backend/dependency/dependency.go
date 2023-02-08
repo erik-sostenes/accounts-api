@@ -8,6 +8,8 @@ import (
 	"github.com/erik-sostenes/accounts-api/internal/apps/backend/controllers"
 	"github.com/erik-sostenes/accounts-api/internal/apps/backend/controllers/account"
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services"
+	p2 "github.com/erik-sostenes/accounts-api/internal/shared/mooc/infrastructure/persistence"
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/infrastructure/persistence"
 	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/command"
 )
 
@@ -35,7 +37,11 @@ func NewInjector() error {
 }
 
 func injectsAccountHandlerDependencies() (controller account.AccountController, err error) {
-	commandHandler := services.CreateAccountCommandHandler{}
+	storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
+
+	commandHandler := services.CreateAccountCommandHandler{
+		AccountManager: services.NewAccountManager(storer),
+	}
 
 	commandBus := make(command.CommandBus[services.CreateAccountCommand])
 

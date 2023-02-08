@@ -7,7 +7,9 @@ import (
 	"testing"
 
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services"
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/infrastructure/persistence"
 	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/command"
+	p2 "github.com/erik-sostenes/accounts-api/internal/shared/mooc/infrastructure/persistence"
 )
 
 type funcController func() (AccountController, error)
@@ -30,13 +32,17 @@ func TestAccountController_Create(t *testing.T) {
 							"career": "ISIC",
 							"ip": "192.168.10.0",
 							"active": "true",
-								"details": {
+							"details": {
 									"permissions": [1, 2, 3]
-								} 
+							} 
 						}`,
 				)),
 			func() (controller AccountController, err error) {
-				commandHandler := services.CreateAccountCommandHandler{}
+				storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
+
+				commandHandler := services.CreateAccountCommandHandler{
+					AccountManager: services.NewAccountManager(storer),
+				}
 
 				commandBus := make(command.CommandBus[services.CreateAccountCommand])
 
@@ -47,6 +53,40 @@ func TestAccountController_Create(t *testing.T) {
 				return NewAccountController(&commandBus), nil
 			},
 			http.StatusCreated,
+		},
+		"Given an invalid http request, a status code 400 is expected": {
+			httptest.NewRequest(http.MethodPut, "/v1/account/create",
+				strings.NewReader(`
+						{
+							"user_name": "JaredNV",
+							"name": "Jared Nicolas V", 
+							"last_name": "Mitchell",
+							"email": "jared.gibson@gmail.com",
+							"password": "7or2m27yw6zrkao",
+							"career": "ISIC",
+							"ip": "192.168.10.0",
+							"active": "true",
+							"details": {
+									"permissions": [1, 2, 3]
+							} 
+						}`,
+				)),
+			func() (controller AccountController, err error) {
+				storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
+
+				commandHandler := services.CreateAccountCommandHandler{
+					AccountManager: services.NewAccountManager(storer),
+				}
+
+				commandBus := make(command.CommandBus[services.CreateAccountCommand])
+
+				if err = commandBus.Record(services.CreateAccountCommand{}, commandHandler); err != nil {
+					return
+				}
+
+				return NewAccountController(&commandBus), nil
+			},
+			http.StatusBadRequest,
 		},
 	}
 
