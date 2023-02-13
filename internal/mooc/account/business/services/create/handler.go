@@ -1,4 +1,4 @@
-package services
+package create
 
 import (
 	"context"
@@ -33,9 +33,10 @@ func (CreateAccountCommand) CommandId() string {
 var _ command.Handler[CreateAccountCommand] = &CreateAccountCommandHandler{}
 
 type CreateAccountCommandHandler struct {
-	ports.AccountManager
+	ports.AccountCreator
 }
 
+// Handler instantiates a domain.Account (Domain Object) with the command primitive values
 func (h CreateAccountCommandHandler) Handler(ctx context.Context, cmd CreateAccountCommand) (err error) {
 	var account domain.Account
 
@@ -54,5 +55,5 @@ func (h CreateAccountCommandHandler) Handler(ctx context.Context, cmd CreateAcco
 		return
 	}
 
-	return h.AccountManager.Create(ctx, account)
+	return h.AccountCreator.Create(ctx, account)
 }

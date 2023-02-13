@@ -3,7 +3,7 @@ package account
 import (
 	"net/http"
 
-	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services"
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services/create"
 	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/command"
 )
 
@@ -15,11 +15,11 @@ type AccountController interface {
 
 // accountController implements the AccountController interface
 type accountController struct {
-	command.Bus[services.CreateAccountCommand]
+	command.Bus[create.CreateAccountCommand]
 }
 
 // NewAccountController injects all dependencies to create the AccountController instance
-func NewAccountController(bus command.Bus[services.CreateAccountCommand]) AccountController {
+func NewAccountController(bus command.Bus[create.CreateAccountCommand]) AccountController {
 	return &accountController{
 		Bus: bus,
 	}

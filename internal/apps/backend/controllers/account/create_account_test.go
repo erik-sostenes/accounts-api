@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services"
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services/create"
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/infrastructure/persistence"
 	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/command"
 	p2 "github.com/erik-sostenes/accounts-api/internal/shared/mooc/infrastructure/persistence"
@@ -40,13 +40,13 @@ func TestAccountController_Create(t *testing.T) {
 			func() (controller AccountController, err error) {
 				storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
 
-				commandHandler := services.CreateAccountCommandHandler{
-					AccountManager: services.NewAccountManager(storer),
+				commandHandler := create.CreateAccountCommandHandler{
+					AccountCreator: create.NewAccountCreator(storer),
 				}
 
-				commandBus := make(command.CommandBus[services.CreateAccountCommand])
+				commandBus := make(command.CommandBus[create.CreateAccountCommand])
 
-				if err = commandBus.Record(services.CreateAccountCommand{}, commandHandler); err != nil {
+				if err = commandBus.Record(create.CreateAccountCommand{}, commandHandler); err != nil {
 					return
 				}
 
@@ -74,13 +74,13 @@ func TestAccountController_Create(t *testing.T) {
 			func() (controller AccountController, err error) {
 				storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
 
-				commandHandler := services.CreateAccountCommandHandler{
-					AccountManager: services.NewAccountManager(storer),
+				commandHandler := create.CreateAccountCommandHandler{
+					AccountCreator: create.NewAccountCreator(storer),
 				}
 
-				commandBus := make(command.CommandBus[services.CreateAccountCommand])
+				commandBus := make(command.CommandBus[create.CreateAccountCommand])
 
-				if err = commandBus.Record(services.CreateAccountCommand{}, commandHandler); err != nil {
+				if err = commandBus.Record(create.CreateAccountCommand{}, commandHandler); err != nil {
 					return
 				}
 

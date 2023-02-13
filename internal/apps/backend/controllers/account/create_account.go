@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/domain"
-	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services"
+	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/services/create"
 	rw "github.com/erik-sostenes/accounts-api/internal/shared/backend/controllers"
 )
 
@@ -42,7 +42,7 @@ func (c *accountController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	command := services.CreateAccountCommand{
+	command := create.CreateAccountCommand{
 		AccountId:       id,
 		AccountUserName: request.UserName,
 		AccountName:     request.Name,
@@ -60,5 +60,5 @@ func (c *accountController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rw.JSON(w, 201, nil)
+	rw.JSON(w, http.StatusCreated, nil)
 }
