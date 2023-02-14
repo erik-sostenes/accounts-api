@@ -39,3 +39,19 @@ type CommandAlreadyRegisteredError string
 func (e CommandAlreadyRegisteredError) Error() string {
 	return string(e)
 }
+
+// QueryNotRegisteredError will return an error when an command not registered
+type QueryNotRegisteredError string 
+
+// QueryNotRegisteredError implements the Error interface
+func (e QueryNotRegisteredError) Error() string {
+	return string(e)
+}
+
+// QueryAlreadyRegisteredError will return an error when an command not registered
+type QueryAlreadyRegisteredError string 
+
+// QueryAlreadyRegisteredError implements the Error interface
+func (e QueryAlreadyRegisteredError) Error() string {
+	return string(e)
+}

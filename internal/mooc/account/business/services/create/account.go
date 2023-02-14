@@ -21,7 +21,7 @@ func NewAccountCreator(storer ports.Storer[domain.AccountId, domain.Account]) po
 	}
 }
 
-// Create method that receives a domain.account, applies the business logic and sends it to the storer
+// Create method that receives a domain.Account, applies the business logic and sends it to the storer
 func (a *accountCreator) Create(ctx context.Context, account domain.Account) (err error) {
 	return a.Storer.Save(ctx, account.AccountId(), account)
 }

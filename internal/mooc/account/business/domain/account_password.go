@@ -27,6 +27,16 @@ func NewAccountPassword(value string) (AccountPassword, error) {
 	}, nil
 }
 
+// NewEncryptedAccountPassword receives an already encrypted string
+func NewEncryptedAccountPassword(value string) (string, error) {
+	password, err := domain.String(value).Validate()
+	if err != nil {
+		return value, err
+	}
+
+	return password, nil
+}
+
 func (a AccountPassword) String() string {
 	return a.value
 }

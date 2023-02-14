@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/domain"
@@ -30,7 +31,7 @@ func NewAccountStorer(rdb *redis.Client) ports.Storer[domain.AccountId, domain.A
 	}
 }
 
-// Save method that persists a user's account in Redis
+// Save method that persists in redis a user's account in Redis
 func (a *accountStorer) Save(ctx context.Context, id domain.AccountId, account domain.Account) error {
 	ok, err := a.HExists(ctx, a.accountKey(id.String()), "id").Result()
 	if err != nil {
@@ -60,6 +61,45 @@ func (a *accountStorer) Save(ctx context.Context, id domain.AccountId, account d
 	}
 
 	return nil
+}
+
+// Search method that searches in redis for a user account by an identifier
+func (a accountStorer) Search(ctx context.Context, accountId domain.AccountId) (account domain.Account, err error) {
+	values, err := a.HGetAll(ctx, a.accountKey(accountId.String())).Result()
+	if err != nil {
+		return
+	}
+
+	if len(values) != 10 {
+		return
+	}
+
+	var details domain.Map
+	if err = json.Unmarshal([]byte(values["details"]), &details); err != nil {
+		return
+	}
+
+	password, err := domain.NewEncryptedAccountPassword(values["password"])
+	if err != nil {
+		return
+	}
+
+	if account, err = domain.NewAccount(
+		values["id"],
+		values["username"],
+		values["name"],
+		values["last_name"],
+		values["email"],
+		password,
+		values["career"],
+		values["ip"],
+		values["active"],
+		details,
+	); err != nil {
+		return
+	}
+
+	return
 }
 
 // Removes method that removes a redis account by means of a key created by the account ID

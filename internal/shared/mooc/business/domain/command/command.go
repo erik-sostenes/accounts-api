@@ -31,7 +31,7 @@ type (
 	//
 	// Maps the DTO values to value objects in our domain and invokes the use case
 	Handler[V Command] interface {
-		// Handler represents the action that you want to perform by means of the Command
+		// Handler represents the action that you want to perform by means of the Command, which will send it to the service layer
 		Handler(ctx context.Context, v V) error
 	}
 )
