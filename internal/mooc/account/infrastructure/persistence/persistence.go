@@ -21,11 +21,12 @@ func NewMockStorer[K comparable, V any]() ports.Storer[K, V] {
 }
 
 // Save saves a resource in a map
+// if the resource already exist, returns a StatusBadRequest type error
 func (m *mockStorer[K, V]) Save(_ context.Context, k K, v V) (err error) {
 	_, ok := m.cache[k]
 
 	if ok {
-		err = fmt.Errorf("resource with id %v already existing", k)
+		err = wrongs.StatusBadRequest(fmt.Sprintf("resource with id %v already existing", k))
 		return
 	}
 
@@ -35,11 +36,12 @@ func (m *mockStorer[K, V]) Save(_ context.Context, k K, v V) (err error) {
 }
 
 // Remove removes the resources by an identifier of a map
+// if the resource is not found, returns a Not Found type error
 func (m *mockStorer[K, V]) Remove(_ context.Context, k K) (err error) {
 	_, ok := m.cache[k]
 
 	if !ok {
-		err = wrongs.StatusBadRequest(fmt.Sprintf("resource with id %v not found", k))
+		err = wrongs.StatusNotFound(fmt.Sprintf("resource with id %v not found", k))
 		return
 	}
 
@@ -49,11 +51,12 @@ func (m *mockStorer[K, V]) Remove(_ context.Context, k K) (err error) {
 }
 
 // Search searchs a resource by id from a map
+// if the resource is not found, returns a Not Found type error
 func (m *mockStorer[K, V]) Search(_ context.Context, k K) (v V, err error) {
 	v, ok := m.cache[k]
 
 	if !ok {
-		err = wrongs.StatusBadRequest(fmt.Sprintf("resource with id %v not found", k))
+		err = wrongs.StatusNotFound(fmt.Sprintf("resource with id %v not found", k))
 		return
 	}
 

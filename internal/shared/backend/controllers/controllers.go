@@ -26,6 +26,10 @@ func HandlerError(w http.ResponseWriter, err error) error {
 		return JSON(w, http.StatusBadRequest, domain.Map{"error": err})
 	case wrongs.StatusUnprocessableEntity:
 		return JSON(w, http.StatusUnprocessableEntity, domain.Map{"error": err})
+	case wrongs.StatusForbidden:
+		return JSON(w, http.StatusForbidden, domain.Map{"error": err})
+	case wrongs.StatusNotFound:
+		return JSON(w, http.StatusNotFound, domain.Map{"error": err})
 	default:
 		return JSON(w, http.StatusInternalServerError, domain.Map{"error": err})
 	}

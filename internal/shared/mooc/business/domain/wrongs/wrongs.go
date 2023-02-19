@@ -24,8 +24,24 @@ func (e StatusInternalServerError) Error() string {
 	return string(e)
 }
 
+// StatusNotFound will return an error when a resource is not found
+type StatusNotFound string
+
+// StatusNotFound implements the Error interface
+func (e StatusNotFound) Error() string {
+	return string(e)
+}
+
+// StatusForbidden will return an error when trying to access a forbidden resource
+type StatusForbidden string
+
+// StatusForbidden implements the Error interface
+func (e StatusForbidden) Error() string {
+	return string(e)
+}
+
 // CommandNotRegisteredError will return an error when an command not registered
-type CommandNotRegisteredError string 
+type CommandNotRegisteredError string
 
 // CommandNotRegisteredError implements the Error interface
 func (e CommandNotRegisteredError) Error() string {
@@ -33,7 +49,7 @@ func (e CommandNotRegisteredError) Error() string {
 }
 
 // CommandAlreadyRegisteredError will return an error when an command not registered
-type CommandAlreadyRegisteredError string 
+type CommandAlreadyRegisteredError string
 
 // CommandAlreadyRegisteredError implements the Error interface
 func (e CommandAlreadyRegisteredError) Error() string {
@@ -41,7 +57,7 @@ func (e CommandAlreadyRegisteredError) Error() string {
 }
 
 // QueryNotRegisteredError will return an error when an command not registered
-type QueryNotRegisteredError string 
+type QueryNotRegisteredError string
 
 // QueryNotRegisteredError implements the Error interface
 func (e QueryNotRegisteredError) Error() string {
@@ -49,7 +65,7 @@ func (e QueryNotRegisteredError) Error() string {
 }
 
 // QueryAlreadyRegisteredError will return an error when an command not registered
-type QueryAlreadyRegisteredError string 
+type QueryAlreadyRegisteredError string
 
 // QueryAlreadyRegisteredError implements the Error interface
 func (e QueryAlreadyRegisteredError) Error() string {

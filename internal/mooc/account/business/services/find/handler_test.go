@@ -36,7 +36,7 @@ func TestAccountHandler_Find(t *testing.T) {
 		queryBusFunc
 		expectedError error
 	}{
-		"Dada una cuenta que no existe": {
+		"Given a valid account that does not exist, an error of type wrongs.NotFound is expected": {
 			id: id,
 			queryBusFunc: func() (bus query.QueryBus[FindAccountQuery, services.AccountResponse], err error) {
 				queryHandler := FindAccountQueryHandler{
@@ -51,9 +51,9 @@ func TestAccountHandler_Find(t *testing.T) {
 
 				return
 			},
-			expectedError: wrongs.StatusBadRequest(fmt.Sprintf("resource with id %v not found", id)),
+			expectedError: wrongs.StatusNotFound(fmt.Sprintf("resource with id %v not found", id)),
 		},
-		"Dada una cuenta que existe": {
+		"Given a valid account that exists, no errors are expected.": {
 			id: account.AccountId().String(),
 			queryBusFunc: func() (bus query.QueryBus[FindAccountQuery, services.AccountResponse], err error) {
 				mockStorer := persistence.NewMockStorer[domain.AccountId, domain.Account]()
@@ -80,8 +80,7 @@ func TestAccountHandler_Find(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			bus, err := ts.queryBusFunc()
 			if err != nil {
-				t.Error(err)
-				t.SkipNow()
+				t.Fatal(err)
 			}
 
 			query := FindAccountQuery{

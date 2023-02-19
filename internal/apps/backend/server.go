@@ -19,24 +19,23 @@ func NewServer(server *http.Server, controllers controllers.Controllers) *Server
 		server,
 		controllers,
 	}
-} 
+}
 
 // Start initialize the server with all http handlers
 func (s *Server) Start() error {
-	s.Server.Handler = s.setRoutes()	
+	s.Server.Handler = s.setRoutes()
 
 	log.Println(s.Server.Addr)
 
 	return s.Server.ListenAndServe()
 }
 
-
 // Routes register all endpoints
 //
 // configure the middlewares CORS
 func (s *Server) setRoutes() *http.ServeMux {
 	mux := http.NewServeMux()
-	
+
 	mux.HandleFunc("/v1/account/create", s.Controllers.AccountController.Create)
 	return mux
 }

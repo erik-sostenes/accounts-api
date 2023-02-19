@@ -97,8 +97,7 @@ func TestAccountController_Create(t *testing.T) {
 
 			controller, err := ts.accountController()
 			if err != nil {
-				t.Error(err)
-				t.SkipNow()
+				t.Fatal(err)
 			}
 
 			controller.Create(resp, req)

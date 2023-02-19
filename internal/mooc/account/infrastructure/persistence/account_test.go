@@ -29,7 +29,7 @@ func TestStorer_Save(t *testing.T) {
 			func() error {
 				account, _ := domain.NewTwoAccount().Account()
 
-				return wrongs.StatusBadRequest(
+				return wrongs.StatusNotFound(
 					fmt.Sprintf("Account with id %s already exists", account.AccountId().String()))
 			}(),
 		},
@@ -57,8 +57,7 @@ func TestStorer_Save(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			account, err := ts.AccountFunc.Account()
 			if err != nil {
-				t.Error(err)
-				t.SkipNow()
+				t.Skip(err)
 			}
 
 			t.Cleanup(func() {
