@@ -6,7 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// AccountPassword(Value Object) represent the password of account
+// AccountPassword (Value Object) represent the password of account
 type AccountPassword struct {
 	value string
 }

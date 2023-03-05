@@ -44,15 +44,14 @@ func NewClaims(account services.AccountResponse) Claims {
 		User:  account.AccountUserName,
 		Email: account.AccountEmail,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 15)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Second * 15)),
 			Issuer:    "itsoeh.edu.mx",
 		},
 	}
 }
 
 // JWT representing all the business logic of a token using the standard jwt
-//
-// JWT implements the Token[Claims] interface
+// implements the Token[Claims] interface
 type JWT struct {
 	privateKey *rsa.PrivateKey
 	publicKey  *rsa.PublicKey
@@ -83,9 +82,6 @@ func (j *JWT) Generate(claims Claims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	return token.SignedString(j.privateKey)
 }
-
-// ValidationError is an error of type jwt.ValidationError
-var ValidationError = jwt.ValidationError{}
 
 // Validate method that validates the token using the public key and the type of encryption method
 func (j *JWT) Validate(token string) (err error) {

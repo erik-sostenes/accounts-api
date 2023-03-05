@@ -26,8 +26,8 @@ var account = func() domain.Account {
 	return account
 }()
 
-// id represents an identifier no registered in the storer
-var id string = "94343721-6baa-4cd5-a0b4-6c5d0419c02d"
+// id represents an identifier no registered in the store
+var id = "94343721-6baa-4cd5-a0b4-6c5d0419c02d"
 
 func TestAccountHandler_Find(t *testing.T) {
 	tsc := map[string]struct {
@@ -40,7 +40,7 @@ func TestAccountHandler_Find(t *testing.T) {
 			id: id,
 			queryBusFunc: func() (bus query.QueryBus[FindAccountQuery, services.AccountResponse], err error) {
 				queryHandler := FindAccountQueryHandler{
-					NewAccountFinder(persistence.NewMockStorer[domain.AccountId, domain.Account]()),
+					NewAccountFinder(persistence.NewMockStore[domain.AccountId, domain.Account]()),
 				}
 
 				bus = make(query.QueryBus[FindAccountQuery, services.AccountResponse])
@@ -56,14 +56,14 @@ func TestAccountHandler_Find(t *testing.T) {
 		"Given a valid account that exists, no errors are expected.": {
 			id: account.AccountId().String(),
 			queryBusFunc: func() (bus query.QueryBus[FindAccountQuery, services.AccountResponse], err error) {
-				mockStorer := persistence.NewMockStorer[domain.AccountId, domain.Account]()
-				err = mockStorer.Save(context.TODO(), account.AccountId(), account)
+				mockStore := persistence.NewMockStore[domain.AccountId, domain.Account]()
+				err = mockStore.Save(context.TODO(), account.AccountId(), account)
 				if err != nil {
 					return
 				}
 
 				queryHandler := FindAccountQueryHandler{
-					NewAccountFinder(mockStorer),
+					NewAccountFinder(mockStore),
 				}
 
 				bus = make(query.QueryBus[FindAccountQuery, services.AccountResponse])

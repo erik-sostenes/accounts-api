@@ -108,7 +108,7 @@ func TestJWT_ValidatorToken(t *testing.T) {
 	}
 
 	for i, ts := range tsc {
-		t.Run(strconv.Itoa(i), func(t *testing.T) {
+		t.Run(strconv.Itoa(i+1), func(t *testing.T) {
 			token := ts.Token
 
 			tokenString, err := token.Generate(ts.Claims)

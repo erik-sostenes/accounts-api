@@ -17,14 +17,13 @@ type (
 	// AccountFinder represents the Left Side
 	// manages business logic find user account
 	AccountFinder[V any] interface {
-		// Find method that finds the user account by domain.AccountId and returns any type and an error
-		// if an error occurs
+		// Find method that finds the user account by domain.AccountId and returns any type and an error if an error occurs
 		Find(context.Context, domain.AccountId) (V, error)
 	}
 
-	// Storer represents the Right Side
+	// Store represents the Right Side
 	// manages the persistence of any data in a DB or in memory, with the required operations
-	Storer[K comparable, V any] interface {
+	Store[K comparable, V any] interface {
 		// Save method that saves any data to database
 		Save(context.Context, K, V) error
 		//Remove method that removes any data to the database by means of an identifier

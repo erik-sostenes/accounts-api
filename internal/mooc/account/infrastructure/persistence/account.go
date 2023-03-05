@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/domain"
 	"github.com/erik-sostenes/accounts-api/internal/mooc/account/business/ports"
 	"github.com/erik-sostenes/accounts-api/internal/shared/mooc/business/domain/wrongs"
@@ -13,26 +12,26 @@ import (
 
 // accountKey method that generates a string key to save or verify the user's account
 // example -> registeredAccount:94343721-6baa-4cd5-a0b4-6c5d0419c02d
-func (a *accountStorer) accountKey(id string) string {
+func (a *accountStore) accountKey(id string) string {
 	return "registeredAccount:" + id
 }
 
-// accountStorer implements ports.Storer interface
-type accountStorer struct {
+// accountStore implements ports.Store interface
+type accountStore struct {
 	*redis.Client
 }
 
-// NewAccountStorer returns an instance of the ports.Strorer interface with the generic data initialized
+// NewAccountStore returns an instance of the ports.Strore interface with the generic data initialized
 //
 // injects the database type to be used to persist the data
-func NewAccountStorer(rdb *redis.Client) ports.Storer[domain.AccountId, domain.Account] {
-	return &accountStorer{
+func NewAccountStore(rdb *redis.Client) ports.Store[domain.AccountId, domain.Account] {
+	return &accountStore{
 		Client: rdb,
 	}
 }
 
 // Save method that persists in redis a user's account in Redis
-func (a *accountStorer) Save(ctx context.Context, id domain.AccountId, account domain.Account) error {
+func (a *accountStore) Save(ctx context.Context, id domain.AccountId, account domain.Account) error {
 	ok, err := a.HExists(ctx, a.accountKey(id.String()), "id").Result()
 	if err != nil {
 		err = wrongs.StatusInternalServerError(err.Error())
@@ -64,7 +63,7 @@ func (a *accountStorer) Save(ctx context.Context, id domain.AccountId, account d
 }
 
 // Search method that searches in redis for a user account by an identifier
-func (a accountStorer) Search(ctx context.Context, accountId domain.AccountId) (account domain.Account, err error) {
+func (a *accountStore) Search(ctx context.Context, accountId domain.AccountId) (account domain.Account, err error) {
 	values, err := a.HGetAll(ctx, a.accountKey(accountId.String())).Result()
 	if err != nil {
 		return
@@ -102,8 +101,8 @@ func (a accountStorer) Search(ctx context.Context, accountId domain.AccountId) (
 	return
 }
 
-// Removes method that removes a redis account by means of a key created by the account ID
-func (a accountStorer) Remove(ctx context.Context, id domain.AccountId) (err error) {
+// Remove method that removes a redis account by means of a key created by the account ID
+func (a *accountStore) Remove(ctx context.Context, id domain.AccountId) (err error) {
 	if _, err = a.Del(ctx, a.accountKey(id.String())).Result(); err != nil {
 		err = wrongs.StatusInternalServerError(err.Error())
 		return

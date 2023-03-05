@@ -10,8 +10,8 @@ import (
 	rw "github.com/erik-sostenes/accounts-api/internal/shared/backend/controllers"
 )
 
-// Request represents a DTO(Data Transfers Object)
-type Request struct {
+// AccountRequest represents a DTO(Data Transfers Object)
+type AccountRequest struct {
 	UserName string     `json:"user_name"`
 	Name     string     `json:"name"`
 	LastName string     `json:"last_name"`
@@ -25,20 +25,20 @@ type Request struct {
 
 // Create method that receives the request body, wraps the DTO and sends it to the service layer
 func (c *accountController) Create(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "PUT" {
-		rw.JSON(w, http.StatusMethodNotAllowed, domain.Map{"error": "Method Not Allowed"})
+	if r.Method != http.MethodPut {
+		rw.ResponseJSON(w, http.StatusMethodNotAllowed, domain.Map{"error": "Method Not Allowed"})
 		return
 	}
 
 	id := r.URL.Query().Get("id")
 	if strings.TrimSpace(id) == "" {
-		rw.JSON(w, http.StatusBadRequest, domain.Map{"error": "Invalid ID Format"})
+		rw.ResponseJSON(w, http.StatusBadRequest, domain.Map{"error": "Invalid ID Format"})
 		return
 	}
 
-	var request Request
+	var request AccountRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		rw.JSON(w, http.StatusUnprocessableEntity, domain.Map{"error": err})
+		rw.ResponseJSON(w, http.StatusUnprocessableEntity, domain.Map{"error": err})
 		return
 	}
 
@@ -60,5 +60,5 @@ func (c *accountController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rw.JSON(w, http.StatusCreated, nil)
+	rw.ResponseJSON(w, http.StatusCreated, nil)
 }

@@ -14,17 +14,17 @@ import (
 
 func TestStorer_Save(t *testing.T) {
 	tsc := map[string]struct {
-		ports.Storer[domain.AccountId, domain.Account]
+		ports.Store[domain.AccountId, domain.Account]
 		domain.AccountFunc
 		expectedError error
 	}{
 		"Given a valid non-existing account, it will be persisted": {
-			NewAccountStorer(persistence.NewRedisDataBase(persistence.NewRedisDBConfiguration())),
+			NewAccountStore(persistence.NewRedisDataBase(persistence.NewRedisDBConfiguration())),
 			domain.NewFirstAccount(),
 			nil,
 		},
 		"Given an existing valid account, it will not be persisted": {
-			NewAccountStorer(persistence.NewRedisDataBase(persistence.NewRedisDBConfiguration())),
+			NewAccountStore(persistence.NewRedisDataBase(persistence.NewRedisDBConfiguration())),
 			domain.NewTwoAccount(),
 			func() error {
 				account, _ := domain.NewTwoAccount().Account()
@@ -35,7 +35,7 @@ func TestStorer_Save(t *testing.T) {
 		},
 	}
 
-	storer := NewAccountStorer(persistence.NewRedisDataBase(persistence.NewRedisDBConfiguration()))
+	storer := NewAccountStore(persistence.NewRedisDataBase(persistence.NewRedisDBConfiguration()))
 	account, err := domain.NewTwoAccount().Account()
 	if err != nil {
 		t.Fatal(err)

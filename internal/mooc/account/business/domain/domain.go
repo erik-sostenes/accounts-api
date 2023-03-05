@@ -24,7 +24,7 @@ func NewFirstAccount() AccountFunc {
 			"Jared Nicolas V",
 			"Mitchell",
 			"jared.gibson@gmail.com",
-			"7or2m27yw6zrkao",
+			"secret",
 			"ISIC",
 			"192.168.10.0",
 			"true",
@@ -44,7 +44,7 @@ func NewTwoAccount() AccountFunc {
 			"Jared Nicolas V",
 			"Mitchell",
 			"jared.gibson@gmail.com",
-			"7or2m27yw6zrkao",
+			"secret",
 			"ISIC",
 			"192.168.10.0",
 			"true",
@@ -53,7 +53,7 @@ func NewTwoAccount() AccountFunc {
 	}
 }
 
-// BinaryMarshalerFunc binary marshal marshal all data types
+// BinaryMarshalerFunc binary marshal all data types
 type BinaryMarshalerFunc func() ([]byte, error)
 
 // MarshalBinary executes the function as long as it complies with the BinaryMarshalerFunc signature

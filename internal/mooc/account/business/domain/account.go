@@ -15,9 +15,7 @@ type Account struct {
 }
 
 // NewAccount takes primitive values and converts them into value objects that make up an Account
-func NewAccount(id, username, name, lastName, email, password, career, ip, active string,
-	details Map,
-) (Account, error) {
+func NewAccount(id, username, name, lastName, email, password, career, ip, active string, details Map) (Account, error) {
 
 	accounId, err := NewAccountId(id)
 	if err != nil {

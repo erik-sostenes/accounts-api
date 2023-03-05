@@ -38,10 +38,10 @@ func TestAccountController_Create(t *testing.T) {
 						}`,
 				)),
 			func() (controller AccountController, err error) {
-				storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
+				store := persistence.NewAccountStore(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
 
 				commandHandler := create.CreateAccountCommandHandler{
-					AccountCreator: create.NewAccountCreator(storer),
+					AccountCreator: create.NewAccountCreator(store),
 				}
 
 				commandBus := make(command.CommandBus[create.CreateAccountCommand])
@@ -72,10 +72,10 @@ func TestAccountController_Create(t *testing.T) {
 						}`,
 				)),
 			func() (controller AccountController, err error) {
-				storer := persistence.NewAccountStorer(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
+				store := persistence.NewAccountStore(p2.NewRedisDataBase(p2.NewRedisDBConfiguration()))
 
 				commandHandler := create.CreateAccountCommandHandler{
-					AccountCreator: create.NewAccountCreator(storer),
+					AccountCreator: create.NewAccountCreator(store),
 				}
 
 				commandBus := make(command.CommandBus[create.CreateAccountCommand])
